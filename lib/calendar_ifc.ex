@@ -47,4 +47,80 @@ defmodule Calendar.IFC do
   def day_of_week({_year, _month, _day} = date) do
     parse!(date) |> day_of_week
   end
+
+  @doc ~S"""
+  Returns a date in the IFC calendar from a `Date` in `Calendar.ISO`.
+  Note, the returned date can be a:
+
+  - `Date`
+  - `:leap_day`
+  - `:year_day`
+
+  ## Examples
+
+      iex> Calendar.IFC.from_iso({2016, 1, 1})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 1, day: 1}
+
+      iex> Calendar.IFC.from_iso({2016, 1, 28})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 1, day: 28}
+
+      iex> Calendar.IFC.from_iso({2016, 1, 29})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 2, day: 1}
+
+      iex> Calendar.IFC.from_iso({2016, 3, 1})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 3, day: 5}
+
+      iex> Calendar.IFC.from_iso({2015, 3, 1})
+      %Date{calendar: Calendar.IFC, year: 2015, month: 3, day: 4}
+
+      iex> Calendar.IFC.from_iso({2016, 6, 16})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 6, day: 28}
+
+      iex> Calendar.IFC.from_iso({2016, 6, 17})
+      {2016, :leap_day}
+
+      iex> Calendar.IFC.from_iso({2015, 6, 17})
+      %Date{calendar: Calendar.IFC, year: 2015, month: 6, day: 28}
+
+      iex> Calendar.IFC.from_iso({2016, 6, 18})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 7, day: 1}
+
+      iex> Calendar.IFC.from_iso({2016, 12, 30})
+      %Date{calendar: Calendar.IFC, year: 2016, month: 13, day: 28}
+
+      iex> Calendar.IFC.from_iso({2016, 12, 31})
+      {2016, :year_day}
+
+      iex> Calendar.IFC.from_iso({2015, 12, 31})
+      {2015, :year_day}
+  """
+  def from_iso(%Date{calendar: Calendar.ISO, year: year, month: month, day: day}) do
+    days =
+      :calendar.date_to_gregorian_days({year, month, day}) -
+      :calendar.date_to_gregorian_days({year, 1, 1})
+
+    day = rem(days, 28) + 1
+    month = div(days, 28) + 1
+    is_leap_year = is_leap_year(year)
+    new_year_offset = if is_leap_year, do: 1, else: 0
+    day_offset = if is_leap_year && days > 6 * 28, do: 1, else: 0
+
+    cond do
+      days == 13 * 28 + new_year_offset ->
+        {year, :year_day}
+      is_leap_year && days == 13 * 28 ->
+        %Date{calendar: Calendar.IFC, year: year, month: 13, day: 28}
+      is_leap_year && days == 6 * 28 ->
+        {year, :leap_day}
+      true ->
+        %Date{calendar: Calendar.IFC, year: year, month: month, day: day - day_offset}
+    end
+  end
+  def from_iso({year, month, day}) do
+    from_iso(%Date{calendar: Calendar.ISO, year: year, month: month, day: day})
+  end
+
+  defp is_leap_year(year) do
+    rem(year, 4) == 0 && !(rem(year, 100) == 0 || rem(year, 400) == 0)
+  end
 end
