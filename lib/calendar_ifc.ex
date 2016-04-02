@@ -23,4 +23,28 @@ defmodule Calendar.IFC do
 
     %Date{calendar: __MODULE__, year: year, month: month, day: day}
   end
+
+  @doc ~S"""
+  Returns day of the week for a given date.
+  Note, in IFC the same day of the year always falls
+  onto the same day of the week, regardless of the month or the year.
+
+  ## Examples
+
+      iex> Calendar.IFC.day_of_week({2016, 1, 1})
+      :sunday
+
+      iex> Calendar.IFC.day_of_week({2016, 1, 13})
+      :friday
+
+      iex> Calendar.IFC.day_of_week({2016, 2, 13})
+      :friday
+  """
+  def day_of_week(%Date{calendar: Calendar.IFC, day: day}) do
+    [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]
+    |> Enum.at(rem(day, 7) - 1)
+  end
+  def day_of_week({_year, _month, _day} = date) do
+    parse!(date) |> day_of_week
+  end
 end
