@@ -5,7 +5,7 @@ defmodule Calendar.IFC do
   International Fixed Calendar, or IFC, splits the calendar year into
   13 months, each having exactly 28 days.
 
-  See: https://en.wikipedia.org/wiki/International_Fixed_Calendar.
+  See: <https://en.wikipedia.org/wiki/International_Fixed_Calendar>.
   """
 
   @doc ~S"""
