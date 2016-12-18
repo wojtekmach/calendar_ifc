@@ -1,23 +1,27 @@
-# Calendar.IFC
+# CalendarIFC
 
-Calendar.IFC is a library to work with the International Fixed Calendar.
-
-International Fixed Calendar, or IFC, splits the calendar year into
-13 months, each having exactly 28 days.
+CalendarIFC is a library to work with the International Fixed Calendar.
 
 See: <https://en.wikipedia.org/wiki/International_Fixed_Calendar>.
 
 ## Examples
 
 ```elixir
-iex> Calendar.IFC.parse!({2016, 1, 1})
-%Date{calendar: Calendar.IFC, year: 2016, month: 1, day: 1}
+iex> CalendarIFC.from_iso!(~D[2016-01-01])
+%Date{calendar: CalendarIFC, year: 2016, month: 1, day: 1}
 
-iex> Calendar.IFC.day_of_week({2016, 1, 13})
-:friday
+# in IFC, any given day of the month will always fall on the same week day.
+iex> CalendarIFC.day_of_week(2016, 1, 13)
+6
+iex> CalendarIFC.day_of_week(2016, 2, 13)
+6
+iex> CalendarIFC.day_of_week(2016, 3, 13)
+6
 
-iex> Calendar.IFC.day_of_week({2016, 2, 13})
-:friday
+iex> to_string CalendarIFC.next_day(2016, 1, 1)
+"2016-01-02"
+iex> to_string CalendarIFC.next_day(2016, 1, 28)
+"2016-02-01"
 ```
 
 ## Installation

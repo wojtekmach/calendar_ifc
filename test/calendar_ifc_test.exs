@@ -1,4 +1,4 @@
-defmodule Calendar.IFCTest do
+defmodule CalendarIFCTest do
   use ExUnit.Case
-  doctest Calendar.IFC
+  doctest CalendarIFC
 end
