@@ -3,7 +3,7 @@ defmodule CalendarIFC.Mixfile do
 
   def project do
     [app: :calendar_ifc,
-     version: "0.0.1",
+     version: "0.1.0",
      description: "Elixir application to work with the International Fixed Calendar.",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
