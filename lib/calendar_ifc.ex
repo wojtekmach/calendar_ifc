@@ -8,7 +8,7 @@ defmodule CalendarIFC do
   @moduledoc ~S"""
   CalendarIFC is a library to work with the International Fixed Calendar.
 
-  International Fixed Calendar, or IFC, splits a solar year into
+  International Fixed Calendar (IFC) splits a solar year into
   13 months of 28 days each. Each month has exactly 4 weeks.
 
   There are two additional days that are not considered to be part of

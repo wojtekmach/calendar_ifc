@@ -1,6 +1,14 @@
 # CalendarIFC
 
 CalendarIFC is a library to work with the International Fixed Calendar.
+International Fixed Calendar (IFC), splits a solar year into
+13 months of 28 days each. Each month has exactly 4 weeks.
+
+There are two additional days that are not considered to be part of
+any week:
+
+- Year day - December 29th every year
+- Leap day - June 29th every leap year
 
 See: <https://en.wikipedia.org/wiki/International_Fixed_Calendar>.
 
